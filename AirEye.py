@@ -1,25 +1,44 @@
+# Get global variable
+
 global aeSensors_connected
+
+# Import modules
+
 import Start as aeStart
 import LCD_RGB_display
 import Show as aeShow
 import storeReadings as aeStore
 import sense_program as aeSense
 import time
+import logging
 
-i = 0
+# Setup logging
+
+logging.basicConfig(filename = 'aeLog.log', level = logging.DEBUG)
+
+# Setup timer and start sensing
+
+timer = 0
 
 aeSense.start_sensors()
-aeStart.log_me('Started sensors','2','Started all sensors.')
+aeStart.logMe('Started sensors','2','Started all sensors.')
+logging.info('2: Started sensors.')
+
 
 while True:
-    i = i + 1
+    timer = timer + 1
     time.sleep(1)
-    if i % 5 == 0:
+    if timer % 900 == 0:
         x = aeSense.read_sensors()
-        aeStart.log_me('Sensing','3','Started sensing.')
-        print ("Running display_unit function with value: " + x)
+        aeStart.logMe('Sensing','3','Started sensing.')
+        logging.info('3: Started sensing.')
+
         aeShow.display_unit(x)
-        aeStart.log_me('Displaying','4','Displaying string.')
-        print ("Running writeSensorValues function with value: " + x)
-        aeStore.writeSensorValues(x)
-        aeStart.log_me('Readings stored','5','Readings stored to file')
+        print ("AIREYE *****", x)
+        aeStart.logMe('Displaying','4','Displaying string.')
+        logging.info('4: Displaying string.')
+
+        aeStore.writeSensorValues(x)        
+        aeStart.logMe('Readings stored','5','Readings stored to file')
+        logging.info('5: Readings stored to file.')
+            
