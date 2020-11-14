@@ -89,19 +89,19 @@ def display_unit(sensor_readings):
                    'Very Poor':'Bad','Severe':'Awful','Error':'Error'}
     for x in sensor_readings:
         if x[2]=='Good':
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'0,255,0',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'0,255,0',5)
         elif x[2]=='Satisfactory':
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'135,206,235',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'135,206,235',5)
         elif x[2]=='Moderate':
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'0,0,255',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'0,0,255',5)
         elif x[2]=='Poor':
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'128,0,128',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'128,0,128',5)
         elif x[2]=='Very Poor':
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,255,0',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,255,0',5)
         elif x[2]=='Severe':
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,0,0',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,0,0',5)
         else :
-            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,255,255',1)
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,255,255',5)
 
 
 def init_show ():
@@ -148,6 +148,6 @@ Display_String('Purple Message','128,0,128',1)
 Display_String('Blue Message','0,0,255',1)
 Display_String('Sky Blue Message','135,206,235',1)
 Display_String('Green Message','0,255,0',1)
-sensor_readings=aeSensors_reading 
+#sensor_readings=aeSensors_reading 
 #[['PM2.5',20,'Good','2017-01-30 4:10PM'],['CO',5,'Moderate','2017-01-01 5:10PM']]
-display_unit(sensor_readings)
+#display_unit(sensor_readings)
