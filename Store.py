@@ -4,11 +4,12 @@
 
 import datetime
 import logging
+
 myVariables=''
 myLogDirectory = ''
 myFilename = ''
 myFilemode = ''
-myConfigFile = "Config_File.txt"
+myConfigFile = "Config_File-2.txt"
 
 
 
@@ -16,7 +17,7 @@ myConfigFile = "Config_File.txt"
 
 def getMyConfigLines (myConfigFile):    
     with open(myConfigFile) as myfile:
-        configFileLines = myfile.readlines() 
+        configFileLines = myfile.readlines()
         return configFileLines
     
 ########################################################################################################
@@ -24,10 +25,9 @@ def getMyConfigLines (myConfigFile):
 def getLineNum(configFileLines):
     a=0
     flag="true"
-
+    #print("testing***",configFileLines)
     while flag=="true":
         configFileLines[a] = configFileLines[a].strip('\n')
-        myModule = configFileLines[a].split('|')
         if configFileLines[a]=='<Store>':
             intStartLine = a
             flag="false"
@@ -35,8 +35,8 @@ def getLineNum(configFileLines):
 
     flag="true"
     while flag=="true":
+        print("AirEye *****",a)
         configFileLines[a] = configFileLines[a].strip('\n')
-        myModule = configFileLines[a].split('|')
         if configFileLines[a]=='</Store>':
             intEndLine = a
             flag="false"
@@ -51,7 +51,7 @@ def getMyVariables(myConfigFile,intStartLine,intEndLine) :
 
     a=0
 
-    while a < (intEndLine-1):
+    while a < (intEndLine):
         configFileLines[a] = configFileLines[a].strip('\n')
         myModule = configFileLines[a].split('|')
         if myModule[0] == "LogDirectory":
@@ -66,17 +66,25 @@ def getMyVariables(myConfigFile,intStartLine,intEndLine) :
 ########################################################################################################    
 
 def writeToFile(timestamp,sensorReading):
-        configFileLines = getMyConfigLines (myConfigFile)
-        intStartLine,intEndLine = getLineNum(configFileLines)
-        myLogDirectory,myFilename,myFilemode = getMyVariables(myConfigFile,intStartLine,intEndLine)
-
-        file = open(myFilename, myFilemode ,encoding = "utf-8")    
+        #configFileLines = getMyConfigLines (myConfigFile)
+        #intStartLine,intEndLine = getLineNum(configFileLines)
+        #myLogDirectory,myFilename,myFilemode = getMyVariables(myConfigFile,intStartLine,intEndLine)
+        myFilename="AirEyeReadings.txt"
+        myFilemode="a"
+        file = open(myFilename, myFilemode)    
         file.write(timestamp + ' ' + sensorReading + '\n')
         print(myFilename + ' created, check in folder')
         file.close()
 ########################################################################################################
+def writeSensorValues(sensorReadings):
+        
+    #for sensorvalue in sensorReadings:
+        timestm= str(datetime.datetime.now())
+        writeToFile (timestm,str(sensorReadings[0]))
+        
 
-'''        
+    
 
-writeToFile("timestamp sent","505")
-'''
+        
+
+ #writeToFile("timestamp sent","505")
