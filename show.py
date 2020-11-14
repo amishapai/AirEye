@@ -1,48 +1,58 @@
 #import pyupm_i2clcd as lcd
 import time
 
-def read_config_module(configFileName,moduleName):
-    #myModule = 'Sense'
-    myFile = open(configFileName,'r')
+aeConfigFileName = "Config_File-2.txt"
 
-    myLine = myFile.readline()
-    number_of_modules = int(myLine)
-    #print("variable type is",type(number of modules))
+def My_Module_Config(func_ModuleName):
+    global aeConfigFileLines
 
-    file_lines = []
-    while (1):
-        myLine = myFile.readline()
-        if myLine == "":
-            break
-        file_lines.append(myLine[:-1])
+    Start_module = '<' + func_ModuleName + '>'
+    End_module = '</' + func_ModuleName + '>'
+    Start_Line = List_Search(Start_module)
+    End_Line = List_Search(End_module)
+    
+    #print(Start_Line)
+    #print(End_Line)
+    
+    return aeConfigFileLines[Start_Line+1:End_Line]
 
-    #print (file_lines)
-    myMod_location = List_Search(file_lines,moduleName)
-    #print("found the string in location ", myMod_location)
 
-    if myMod_location == -1:
-        print("Didn't find the module")
-    else:
-        Module_start_end_points = file_lines[myMod_location].split('|')
-        print("Module start end points:",Module_start_end_points)
-    # Rule : Don't put any spaces in the beggining of the file.
+#Read the config file into
 
-    return file_lines[int(Module_start_end_points[1])-1:int(Module_start_end_points[2])]
+def load_config_file():
+    global aeConfigFileName
+    global aeConfigFileLines
+    
+    myFile = open(aeConfigFileName,'r')
+    aeConfigFileLines = []
+    aeConfigFileLines = myFile.read().splitlines()
+    myFile.close()
 
-def List_Search(func_List,func_String):
-    func_Result = 0
-    for func_Result in range(0,len(func_List)):
-        location = func_List[func_Result].find(func_String)
+    #print (type(aeConfigFileLines))
+    #print (aeConfigFileLines)
+
+    return
+
+# List_Search finds any string in a given list of strings, returns -1 if we dont find it
+# Rule : find for string only if its in the beginning of the line
+# Rule : Don't put any spaces in the beggining of the file.
+def List_Search(func_string):
+    global aeConfigFileLines
+    
+    func_result = 0
+    for func_result in range(0,len(aeConfigFileLines)):
+        location = aeConfigFileLines[func_result].find(func_string)
         if location > -1:
             break
     if location == 0 :
-        return func_Result;
+        return func_result
     else:
-        return -1;
+        return -1
 
-def Get_Value(file_lines,name):
-    default_color_line = List_Search(file_lines, name)
-    nameValueString = file_lines[int(default_color_line)]
+def Get_Value(name):
+    default_color_line = List_Search(name)
+    print("ValueLineNumber:",default_color_line)
+    nameValueString = aeConfigFileLines[int(default_color_line)]
     print("NameValueString:",nameValueString)
     nameValueList = nameValueString.split('|')
     return nameValueList[1]
@@ -57,35 +67,62 @@ def convertColor(colorStr):
     
 import LCD_RGB_display as lcd
 
-# 
 # eg. Display_String('Message..','255,0,255',10)
 def Display_String(string,color,duration):
+    print ("Display started")
+    print (string)
+    print (type(string))
+    print (color)
+    print (type(color))
+    print (duration)
+    print (type(duration))
     colorList = convertColor(color)
     lcd.myLcd_SETCOLOR(colorList)
     lcd.myLcd_SCROLL(string)
     lcd.myLcd_ON ()
-    time.sleep(duration)    
+    time.sleep(duration)
+    print ("Display ended")
+    return
 
-# TODO if color or duration use defaults from config file
+def display_unit(sensor_readings):
+    grading_map = {'Good':'Good','Satisfactory':'Fair','Moderate':'Mild','Poor':'Poor',
+                   'Very Poor':'Bad','Severe':'Awful','Error':'Error'}
+    for x in sensor_readings:
+        if x[2]=='Good':
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'0,255,0',1)
+        elif x[2]=='Satisfactory':
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'135,206,235',1)
+        elif x[2]=='Moderate':
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'0,0,255',1)
+        elif x[2]=='Poor':
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'128,0,128',1)
+        elif x[2]=='Very Poor':
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,255,0',1)
+        elif x[2]=='Severe':
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,0,0',1)
+        else :
+            Display_String(x[0]+','+str(x[1])+','+grading_map[x[2]]+','+x[3],'255,255,255',1)
+
 
 def init_show ():
-    file_lines = read_config_module('Config_File.txt','Show')
+    load_config_file()
+    file_lines = My_Module_Config('Show')
     print("FileLines:",file_lines)
-    default_color = Get_Value(file_lines,'Default_Color')
+    default_color = Get_Value('Default_Color')
     print("Default_Color:",default_color)
     default_Color_List = convertColor(default_color)        
 
-    error_color = Get_Value(file_lines,'Error_Color')
-    print("Error_Color:",error_color)
-    error_Color_List = convertColor(error_color)
+#    error_color = Get_Value('Error_Color')
+#    print("Error_Color:",error_color)
+#    error_Color_List = convertColor(error_color)
 
-    warning_color = Get_Value(file_lines,'Warning_Color')
-    print("Warning_Color:",warning_color)
-    warning_Color_List = convertColor(warning_color)
+#    warning_color = Get_Value('Warning_Color')
+#    print("Warning_Color:",warning_color)
+#    warning_Color_List = convertColor(warning_color)
     
-    default_string = Get_Value(file_lines,'Default_String')
+    default_string = Get_Value('Default_String')
     print("Default_String:",default_string)
-    default_duration = int(Get_Value(file_lines,'Default_Duration'))
+    default_duration = int(Get_Value('Default_Duration'))
     print("Default_Duration:",default_duration)
 
     lcd.myLcd_SETCOLOR(default_Color_List)
@@ -93,17 +130,24 @@ def init_show ():
     lcd.myLcd_ON ()
     time.sleep(default_duration)
 
-    lcd.myLcd_SETCOLOR(error_Color_List)
-    lcd.myLcd_SCROLL('Test Error Message')
-    lcd.myLcd_ON ()
-    time.sleep(default_duration)
+#    lcd.myLcd_SETCOLOR(error_Color_List)
+#    lcd.myLcd_SCROLL('Test Error Message')
+#    lcd.myLcd_ON ()
+#    time.sleep(default_duration)
 
-    lcd.myLcd_SETCOLOR(warning_Color_List)
-    lcd.myLcd_SCROLL('Test Warn Message')
-    lcd.myLcd_ON ()
-    time.sleep(default_duration)
-    # TODO check if this needs to be turned off    
-    #lcd.myLcd_OFF ()
+#    lcd.myLcd_SETCOLOR(warning_Color_List)
+#    lcd.myLcd_SCROLL('Test Warn Message')
+#    lcd.myLcd_ON ()
+#    time.sleep(default_duration)
+    
 
 init_show ()
-Display_String('Test Message','255,0,255',10)
+Display_String('Red Message','255,0,0',1)
+Display_String('Yellow Message','255,255,0',1)
+Display_String('Purple Message','128,0,128',1)
+Display_String('Blue Message','0,0,255',1)
+Display_String('Sky Blue Message','135,206,235',1)
+Display_String('Green Message','0,255,0',1)
+sensor_readings=aeSensors_reading 
+#[['PM2.5',20,'Good','2017-01-30 4:10PM'],['CO',5,'Moderate','2017-01-01 5:10PM']]
+display_unit(sensor_readings)
