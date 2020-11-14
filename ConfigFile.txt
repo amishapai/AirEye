@@ -1,0 +1,33 @@
+<Store>
+LogDirectory|abc
+Filename|abc1.txt
+Filemode|a
+</Store>
+
+<Sense>
+Number of sensors|1
+Sensor0|0
+PM2.5|00|30|Good|31|60|Satisfactory|61|90|Moderate|91|120|Poor|121|250|Very poor|250|999999|Severe
+PM10|00|50|Good|51|100|Satisfactory|101|250|Moderate|251|350|Poor|351|430|Very poor|430|999999|Severe 
+NO2|00|40|Good|41|80|Satisfactory|81|180|Moderate|181|280|Poor|281|400|Very poor|400|999999|Severe
+O3|00|50|Good|51|100|Satisfactory|101|168|Moderate|169|208|Poor|209|748|Very poor|748|999999|Severe
+CO|0|1.0|Good|1.1|2.0|Satisfactory|2.1|10|Moderate|10.1|17|Poor|17.1|34|Very poor|34|999999|Severe
+SO2|00|40|Good|41|80|Satisfactory|81|380|Moderate|381|800|Poor|801|1600|Very poor|1600|999999|Severe
+NH3|00|200|Good|201|400|Satisfactory|401|800|Moderate|801|1200|Poor|1201|1800|Very poor|1800|999999|Severe
+Pb|0|0.5|Good|0.6|1.0|Satisfactory|1.1|2.0|Moderate|2.1|3.0|Poor|3.1|3.5|Very poor|3.5|999999|Severe
+
+</Sense>
+
+<AirEye>
+Name|Intel
+Number|0001
+Sense_Time|900
+</AirEye>
+
+
+<Show>
+LCD_Port|I2C
+Default_String|Ready!
+Default_Duration|5
+Default_Color|255,255,255
+</Show>
